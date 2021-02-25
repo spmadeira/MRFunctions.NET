@@ -39,8 +39,8 @@ namespace MRFunctions
         
         internal Func<TKey, IEnumerable<TValue>, TValue> Reduce { get; set; }
 
-        internal Func<KeyValuePair<TKey, TValue>, Task> Write { get; set; }
-            = (pair) => Task.Run(() => Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}"));
+        internal Action<KeyValuePair<TKey, TValue>> Write { get; set; }
+            = (pair) => Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}");
 
         public MRBuilder<TInput, TData, TKey, TValue> WithComparer(Func<TKey, TKey, bool> comparer)
         {
@@ -54,12 +54,6 @@ namespace MRFunctions
             return this;
         }
 
-        public MRBuilder<TInput, TData, TKey, TValue> WithWriter(Func<KeyValuePair<TKey, TValue>, Task> writer)
-        {
-            Write = writer;
-            return this;
-        }
-        
         public MRBuilder<TInput, TData, TKey, TValue> WithWriter(Action<KeyValuePair<TKey, TValue>> writer)
         {
             Write = pair => Task.Run(() => writer(pair));
