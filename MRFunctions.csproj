@@ -2,6 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <PackageId>MRFunctions.NET</PackageId>
+        <Authors>spmadeira</Authors>
+        <PackageProjectUrl>https://github.com/spmadeira/MRFunctions.NET</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/spmadeira/MRFunctions.NET</RepositoryUrl>
     </PropertyGroup>
 
 </Project>

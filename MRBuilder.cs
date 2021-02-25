@@ -40,7 +40,7 @@ namespace MRFunctions
         internal Func<TKey, IEnumerable<TValue>, TValue> Reduce { get; set; }
 
         internal Func<KeyValuePair<TKey, TValue>, Task> Write { get; set; }
-            = async (pair) => Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}");
+            = (pair) => Task.Run(() => Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}"));
 
         public MRBuilder<TInput, TData, TKey, TValue> WithComparer(Func<TKey, TKey, bool> comparer)
         {
@@ -68,6 +68,9 @@ namespace MRFunctions
 
         public MapReduce<TInput, TData, TKey, TValue> Build()
         {
+            if (Reduce == null)
+                throw new ArgumentException("Reducer cannot be null", nameof(Reduce));
+            
             return new()
             {
                 Read = Read,
