@@ -28,7 +28,7 @@ namespace MRFunctions
 
         private IEnumerable<TData> Data;
         private ConcurrentBag<IEnumerable<KeyValuePair<TKey, TValue>>> Groups;
-        private ConcurrentBag<KeyValuePair<TKey, List<TValue>>> Buckets;
+        private ConcurrentDictionary<TKey, ConcurrentBag<TValue>> Buckets;
         private ConcurrentBag<KeyValuePair<TKey, TValue>> Pairs;
 
         public async Task Run(TInput input)
@@ -42,7 +42,7 @@ namespace MRFunctions
 
             await Task.WhenAll(mapOperations);
 
-            Buckets = new ConcurrentBag<KeyValuePair<TKey, List<TValue>>>();
+            Buckets = new ConcurrentDictionary<TKey, ConcurrentBag<TValue>>();
             
             var shuffleOperations = Groups
                 .Select(Shuffle);
@@ -77,23 +77,18 @@ namespace MRFunctions
             {
                 return Task.Run(() =>
                 {
-                    foreach (var bucket in Buckets)
+                    Buckets.AddOrUpdate(pair.Key, new ConcurrentBag<TValue> {pair.Value}, (_, val) =>
                     {
-                        if (Compare(bucket.Key, pair.Key))
-                        {
-                            bucket.Value.Add(pair.Value);
-                            return;
-                        }
-                    }
-
-                    Buckets.Add(new KeyValuePair<TKey, List<TValue>>(pair.Key, new List<TValue> {pair.Value}));
+                        val.Add(pair.Value);
+                        return val;
+                    });
                 });
             });
 
             return Task.WhenAll(tasks);
         }
 
-        private Task ReduceBucket(KeyValuePair<TKey, List<TValue>> bucket)
+        private Task ReduceBucket(KeyValuePair<TKey, ConcurrentBag<TValue>> bucket)
         {
             return Task.Run(() =>
             {
