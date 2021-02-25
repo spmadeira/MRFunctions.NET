@@ -6,6 +6,7 @@
         <Authors>spmadeira</Authors>
         <PackageProjectUrl>https://github.com/spmadeira/MRFunctions.NET</PackageProjectUrl>
         <RepositoryUrl>https://github.com/spmadeira/MRFunctions.NET</RepositoryUrl>
+        <PackageVersion>1.0.1</PackageVersion>
     </PropertyGroup>
 
 </Project>

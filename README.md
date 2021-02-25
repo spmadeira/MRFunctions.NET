@@ -20,10 +20,12 @@ await MapReduce
     .WithWriter(pair => System.Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}"))
     .Build().Run(text);
 ```
-Output:
+Output*:
 ```
 Key: River | Value: 2
 Key: Car | Value: 3
 Key: Deer | Value: 2
 Key: Bear | Value: 2
 ```
+---
+\**Order may differ as all operations run parallel to each other thus order is determined by race conditions.*
