@@ -56,7 +56,7 @@ namespace MRFunctions
 
         public MRBuilder<TInput, TData, TKey, TValue> WithWriter(Action<KeyValuePair<TKey, TValue>> writer)
         {
-            Write = pair => Task.Run(() => writer(pair));
+            Write = writer;
             return this;
         }
 
