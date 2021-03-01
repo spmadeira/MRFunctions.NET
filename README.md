@@ -8,7 +8,7 @@ Small library for simulating a MapReduce operation, written with C#.
 ```csharp
 var text = "Deer Bear River\nCar Car River\nDeer Car Bear";
 
-await MapReduce
+MapReduce
     .WithInput<string>()
     .WithReader(input => input.Split("\n"))
     .WithMapper(data =>
