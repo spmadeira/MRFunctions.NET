@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +49,8 @@ namespace MRFunctions
             Pairs
                 .AsParallel()
                 .ForAll(Write);
+            
+            Cleanup();
         }
 
         private void MapData(TData data)
