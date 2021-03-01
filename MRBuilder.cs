@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,14 +33,15 @@ namespace MRFunctions
 
     public class MRBuilder<TInput, TData, TKey, TValue> : MRBuilder<TInput, TData>
     {
-        internal Func<TData, IEnumerable<KeyValuePair<TKey, TValue>>> Map { get; init; }
-        
-        internal Func<TKey, TKey, bool> Compare { get; set; } = (k1, k2) => k1.Equals(k2);
-        
-        internal Func<TKey, IEnumerable<TValue>, TValue> Reduce { get; set; }
-
-        internal Action<KeyValuePair<TKey, TValue>> Write { get; set; }
+        internal static Func<TKey, TKey, bool> DEFAULT_COMPARER 
+            = (k1, k2) => k1.Equals(k2);
+        internal static Action<KeyValuePair<TKey, TValue>> DEFAULT_WRITER 
             = (pair) => Console.WriteLine($"Key: {pair.Key} | Value: {pair.Value}");
+        
+        internal Func<TData, IEnumerable<KeyValuePair<TKey, TValue>>> Map { get; init; }
+        internal Func<TKey, TKey, bool> Compare { get; set; } = DEFAULT_COMPARER;
+        internal Func<TKey, IEnumerable<TValue>, TValue> Reduce { get; set; }
+        internal Action<KeyValuePair<TKey, TValue>> Write { get; set; } = DEFAULT_WRITER;
 
         public MRBuilder<TInput, TData, TKey, TValue> WithComparer(Func<TKey, TKey, bool> comparer)
         {
